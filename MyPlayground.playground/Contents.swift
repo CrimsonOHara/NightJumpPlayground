@@ -7,10 +7,25 @@ enum GameSceneState {
     
 }
 
-
-
 class GameScene: SKScene, SKPhysicsContactDelegate   {
+    var gameState: GameSceneState = .active
+    var timer: CGFloat = 0
+    var sinceTouch : CFTimeInterval = 0
+    var scoreLabel: SKLabelNode!
+    let fixedDelta: CFTimeInterval = 1.0/60.0 /* 60 FPS */
+    var light: SKReferenceNode!
+    var coins: SKSpriteNode!
+    var block: SKSpriteNode!
+    var points = 0
+    var thief: SKSpriteNode!
+    var scrollLayer: SKNode!
+    let scrollSpeed: CGFloat = 2
+    var shield: SKSpriteNode!
+    var lastLight: CFTimeInterval = 0
+    var lastShield: CFTimeInterval = 0
+    var shieldIsUp = false
     var buttonStart: SKNode!
+    
     override func didMove(to view: SKView) {
     self.physicsWorld.contactDelegate = self
     buttonStart = self.childNode(withName: "buttonStart")!
@@ -23,6 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate   {
             let location = touch.location(in: self)
             if buttonStart.contains(location) || self.atPoint(location).name == "buttonStart" {
                 buttonStart.alpha = 0
+                gameState = .active
             }
         }
     }
