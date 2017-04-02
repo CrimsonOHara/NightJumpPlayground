@@ -11,25 +11,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate   {
     var gameState: GameSceneState = .gameOver
     var timer: CGFloat = 0
     var sinceTouch : CFTimeInterval = 0
-    var scoreLabel: SKLabelNode!
+    var points = 0
+    var lastLight: CFTimeInterval = 0
+    var lastShield: CFTimeInterval = 0
+    var shieldIsUp = false
     let fixedDelta: CFTimeInterval = 1.0/60.0 /* 60 FPS */
+    let scrollSpeed: CGFloat = 2
+    
+    var scoreLabel: SKLabelNode!
     var light: SKReferenceNode!
     var thief: SKNode!
     var coins: SKSpriteNode!
     var block: SKSpriteNode!
-    var points = 0
-    var scrollLayer: SKNode!
-    let scrollSpeed: CGFloat = 2
-    var shield: SKSpriteNode!
-    var lastLight: CFTimeInterval = 0
-    var lastShield: CFTimeInterval = 0
-    var shieldIsUp = false
+    var shield: SKNode!
     var buttonStart: SKNode!
+    var scrollLayer: SKNode!
     
     override func didMove(to view: SKView) {
-    self.physicsWorld.contactDelegate = self
-    buttonStart = self.childNode(withName: "buttonStart")!
-    thief = self.childNode(withName: "//actualthief")!
+        self.physicsWorld.contactDelegate = self
+        buttonStart = self.childNode(withName: "buttonStart")!
+        thief = self.childNode(withName: "//actualthief")!
+        shield = self.childNode(withName: "//shield")!
 
     }
     func didBegin(_ contact: SKPhysicsContact) {
@@ -49,6 +51,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate   {
         thief.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 20))
         thief.physicsBody?.categoryBitMask = 4
         thief.physicsBody?.collisionBitMask = 4
+        for touch in touches {
+            let location = touch.location(in: self)
+            if shield.contains(location) || self.atPoint(location).name == "shield" {
+                shieldIsUp = true
+            }
+        }
+
     }
 
 }
