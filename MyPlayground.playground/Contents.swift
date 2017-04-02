@@ -51,13 +51,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate   {
         thief.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 20))
         thief.physicsBody?.categoryBitMask = 4
         thief.physicsBody?.collisionBitMask = 4
+        sinceTouch = 0
         for touch in touches {
             let location = touch.location(in: self)
             if shield.contains(location) || self.atPoint(location).name == "shield" {
                 shieldIsUp = true
             }
         }
-
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            if shield.contains(location) {
+                shieldIsUp = false
+            }
+            if self.atPoint(location).name == "shield" {
+                if (shieldIsUp) {
+                    shieldIsUp = false
+                }
+            }
+        }
     }
 
 }
