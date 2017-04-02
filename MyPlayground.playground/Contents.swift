@@ -19,10 +19,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate   {
     let scrollSpeed: CGFloat = 2
     
     var scoreLabel: SKLabelNode!
-    var light: SKReferenceNode!
+    var light: SKNode!
     var thief: SKNode!
-    var coins: SKSpriteNode!
-    var block: SKSpriteNode!
+    var coins: SKNode!
     var shield: SKNode!
     var buttonStart: SKNode!
     var scrollLayer: SKNode!
@@ -32,8 +31,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate   {
         buttonStart = self.childNode(withName: "buttonStart")!
         thief = self.childNode(withName: "//actualthief")!
         shield = self.childNode(withName: "//shield")!
+        scrollLayer = self.childNode(withName: "//scrollLayer")!
+        light = self.childNode(withName: "//lightReference")!
+        coins = self.childNode(withName: "//coinSprite")!
+        scoreLabel = self.childNode(withName: "//scoreLabel") as! SKLabelNode
+        coins.physicsBody?.categoryBitMask = 4
+        light.run(SKAction.hide())
+        scoreLabel.text = String(points)
 
     }
+    
     func didBegin(_ contact: SKPhysicsContact) {
         
     }
